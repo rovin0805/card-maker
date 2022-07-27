@@ -19,9 +19,9 @@ const CardEditForm = ({ card }) => {
         value={company}
       />
       <select className={styles.select} name='theme' value={theme}>
-        <option value='light'>Light</option>
-        <option value='dark'>Dark</option>
-        <option value='colorful'>Colorful</option>
+        <option placeholder='light'>light</option>
+        <option placeholder='dark'>dark</option>
+        <option placeholder='colorful'>colorful</option>
       </select>
       <input className={styles.input} type='text' name='title' value={title} />
       <input className={styles.input} type='text' name='email' value={email} />
