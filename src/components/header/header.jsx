@@ -13,4 +13,4 @@ const Header = ({ onLogout }) => (
   </header>
 );
 
-export default Header;
+export default React.memo(Header);

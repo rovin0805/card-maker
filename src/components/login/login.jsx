@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import Header from '../header/header';
 import Footer from '../footer/footer';
 import styles from './login.module.css';
@@ -7,23 +7,23 @@ import { useNavigate } from 'react-router-dom';
 const Login = ({ authService }) => {
   const navigate = useNavigate();
 
-  const onLogin = event => {
+  const onLogin = (event) => {
     authService
       .login(event.currentTarget.textContent) //
-      .then(data => {
-        console.log(data);
-        goToMaker(data?.user?.uid);
-      }) //
-      .catch(err => alert(`Login Error! : ${err}`));
+      .then((data) => goToMaker(data?.user?.uid)) //
+      .catch((err) => alert(`Login Error! : ${err}`));
   };
 
-  const goToMaker = userId => navigate('/maker', { state: { id: userId } });
+  const goToMaker = useCallback(
+    (userId) => navigate('/maker', { state: { id: userId } }),
+    [navigate]
+  );
 
   useEffect(() => {
-    authService.onnAuthChanged(user => {
+    authService.onnAuthChanged((user) => {
       user && goToMaker(user?.uid);
     });
-  }, []);
+  }, [authService, goToMaker]);
 
   return (
     <section className={styles.login}>

@@ -7,4 +7,4 @@ const Button = ({ name, onClick }) => (
   </button>
 );
 
-export default Button;
+export default React.memo(Button);

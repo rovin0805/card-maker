@@ -12,9 +12,9 @@ const authService = new AuthService(firebaseApp);
 const imageUploader = new ImageUploader();
 const cardRepository = new CardRepository(firebaseApp);
 
-const FileInput = (props) => (
+const FileInput = React.memo((props) => (
   <ImageFileInput {...props} imageUploader={imageUploader} />
-);
+));
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
