@@ -1,71 +1,46 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Footer from '../footer/footer';
 import Header from '../header/header';
 import Editor from '../editor/editor';
 import Preview from '../preview/preview';
 import styles from './maker.module.css';
 
-const Maker = ({ FileInput, authService }) => {
-  const [cards, setCards] = useState({
-    1: {
-      id: '1',
-      name: 'Ellie',
-      company: 'Samsung',
-      theme: 'dark',
-      title: 'Software Engineer',
-      email: 'ellie@gmail.com',
-      message: 'go for it',
-      fileName: 'ellie',
-      fileURL: null,
-    },
-    2: {
-      id: '2',
-      name: 'Ellie2',
-      company: 'Samsung',
-      theme: 'light',
-      title: 'Software Engineer',
-      email: 'ellie@gmail.com',
-      message: 'go for it',
-      fileName: 'ellie',
-      fileURL: 'ellie.png',
-    },
-    3: {
-      id: '3',
-      name: 'Ellie3',
-      company: 'Samsung',
-      theme: 'colorful',
-      title: 'Software Engineer',
-      email: 'ellie@gmail.com',
-      message: 'go for it',
-      fileName: 'ellie',
-      fileURL: null,
-    },
-  });
-
+const Maker = ({ FileInput, authService, cardRepository }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [cards, setCards] = useState({});
+  const [userId, setUserId] = useState(location.state.id);
 
   const onLogout = () => authService.logout();
 
   useEffect(() => {
     authService.onnAuthChanged((user) => {
-      !user && navigate('/');
+      if (user) {
+        setUserId(user.uid);
+      } else {
+        navigate('/');
+      }
     });
   }, []);
 
-  const createOrUpdateCard = (card) =>
+  const createOrUpdateCard = (card) => {
     setCards((prev) => {
       const updated = { ...prev };
       updated[card.id] = card;
       return updated;
     });
+    cardRepository.saveCard(userId, card);
+  };
 
-  const deleteCard = (card) =>
+  const deleteCard = (card) => {
     setCards((prev) => {
       const updated = { ...prev };
       delete updated[card.id];
       return updated;
     });
+    cardRepository.removeCard(userId, card);
+  };
 
   return (
     <section className={styles.maker}>
